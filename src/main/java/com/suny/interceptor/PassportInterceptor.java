@@ -22,11 +22,14 @@ import java.util.Date;
 @Component
 public class PassportInterceptor implements HandlerInterceptor {
 
-    private final LoginTicketDAO loginTicketDAO;
+    private LoginTicketDAO loginTicketDAO;
 
-    private final UserDAO userDAO;
+    private UserDAO userDAO;
 
-    private final HostHolder hostHolder;
+    private HostHolder hostHolder;
+
+    public PassportInterceptor() {
+    }
 
     public PassportInterceptor(LoginTicketDAO loginTicketDAO, UserDAO userDAO, HostHolder hostHolder) {
         this.loginTicketDAO = loginTicketDAO;
