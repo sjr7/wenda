@@ -78,3 +78,7 @@
  Process finished with exit code 0
 
  ````
+ 
+ 2.数据库手动写sql语句注意
+ - 注释 COMMENT后使用单引号'
+ - 字段,表名需要括起来就是用`
