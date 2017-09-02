@@ -1,6 +1,7 @@
 package com.suny.configuration;
 
 import com.suny.interceptor.LoginRequiredInterceptor;
+import com.suny.interceptor.PassportInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -13,11 +14,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Component
 public class WendaWebConfiguration extends WebMvcConfigurerAdapter {
 
+    private final PassportInterceptor passportInterceptor;
+
     private final LoginRequiredInterceptor loginRequiredInterceptor;
 
     @Autowired
-    public WendaWebConfiguration(LoginRequiredInterceptor loginRequiredInterceptor) {
+    public WendaWebConfiguration(LoginRequiredInterceptor loginRequiredInterceptor, PassportInterceptor passportInterceptor) {
         this.loginRequiredInterceptor = loginRequiredInterceptor;
+        this.passportInterceptor = passportInterceptor;
     }
 
     /**
@@ -29,6 +33,7 @@ public class WendaWebConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginRequiredInterceptor);
+        registry.addInterceptor(passportInterceptor);
         super.addInterceptors(registry);
     }
 }
