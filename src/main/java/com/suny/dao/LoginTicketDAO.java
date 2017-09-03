@@ -18,7 +18,7 @@ public interface LoginTicketDAO {
     int addTicket(LoginTicket loginTicket);
 
 
-    @Select({"select ", SELECT_FIELDS + "from " + TABLE_NAME + "where ticket=#{ticket}"})
+    @Select({"select", SELECT_FIELDS + " from " + TABLE_NAME + " where ticket=#{ticket}"})
     LoginTicket selectByTicket(String ticket);
 
 

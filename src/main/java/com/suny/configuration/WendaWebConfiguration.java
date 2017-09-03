@@ -24,16 +24,10 @@ public class WendaWebConfiguration extends WebMvcConfigurerAdapter {
         this.passportInterceptor = passportInterceptor;
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>This implementation is empty.
-     *
-     * @param registry
-     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(passportInterceptor);
 //        registry.addInterceptor(loginRequiredInterceptor);
-//        registry.addInterceptor(passportInterceptor);
         super.addInterceptors(registry);
     }
 }

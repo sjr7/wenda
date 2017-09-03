@@ -162,7 +162,35 @@ CREATE TABLE `question` (
 An invalid form control with name='' is not focusable.
 ```
 
+5.拦截器中无法注入bean
+原来的代码
+![images/beanNull.png](images/beanNull.png)
+把原来的构造方法注入修改成以下的代码就可以正常注入,
+```java
+@Component
+public class PassportInterceptor implements HandlerInterceptor {
 
+    @Autowired
+    private LoginTicketDAO loginTicketDAO;
+    @Autowired
+    private UserDAO userDAO;
+    @Autowired
+    private HostHolder hostHolder;
+```
+
+6.sql语句报错
+在mapper中的写法是这样,注意看**from**跟**where**前面是没有空格的
+```java
+@Select({"select", SELECT_FIELDS + "from " + TABLE_NAME + "where ticket=#{ticket}"})
+```
+控制台报错出来的语句
+```
+### SQL: select id user_id, expired, status, ticketfrom login_ticketwhere ticket=?
+```
+不是我们预想的那样,于是把mapper中的语句改成下面这样就不报错了
+````java
+@Select({"select", SELECT_FIELDS + " from " + TABLE_NAME + " where ticket=#{ticket}"})
+````
 
 
 

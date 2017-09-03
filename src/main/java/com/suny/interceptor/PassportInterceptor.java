@@ -22,21 +22,12 @@ import java.util.Date;
 @Component
 public class PassportInterceptor implements HandlerInterceptor {
 
+    @Autowired
     private LoginTicketDAO loginTicketDAO;
-
+    @Autowired
     private UserDAO userDAO;
-
+    @Autowired
     private HostHolder hostHolder;
-
-    public PassportInterceptor() {
-    }
-
-    public PassportInterceptor(LoginTicketDAO loginTicketDAO, UserDAO userDAO, HostHolder hostHolder) {
-        this.loginTicketDAO = loginTicketDAO;
-        this.userDAO = userDAO;
-        this.hostHolder = hostHolder;
-    }
-
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
