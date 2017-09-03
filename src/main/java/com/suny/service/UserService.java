@@ -8,6 +8,7 @@ import com.suny.utils.WendaUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -27,6 +28,7 @@ public class UserService {
         this.loginTicketDAO = loginTicketDAO;
     }
 
+    @Transactional
     public Map<String, Object> register(String username, String password) {
         Map<String, Object> map = new HashMap<>();
         if (StringUtils.isBlank(username)) {
@@ -44,7 +46,7 @@ public class UserService {
         }
 
         // 密码强度
-        User user1 = new User();
+        user = new User();
         user.setName(username);
         user.setSalt(UUID.randomUUID().toString());
         String head = String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000));

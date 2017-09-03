@@ -32,14 +32,14 @@ public class LoginController {
 
 
     @SuppressWarnings("Duplicates")
-    @RequestMapping(path = {"/reg/"}, method = {RequestMethod.POST})
+    @RequestMapping(path = {"/reg"}, method = {RequestMethod.POST})
     public String reg(Model model, @RequestParam("username") String username,
                       @RequestParam("password") String password,
                       @RequestParam(value = "next", required = false) String next,
                       @RequestParam(value = "rememberme", defaultValue = "false") boolean remeberme,
                       HttpServletResponse response) {
         try {
-            Map<String, Object> map = userService.login(username, password);
+            Map<String, Object> map = userService.register(username, password);
             if (map.containsKey("ticket")) {
                 Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
                 cookie.setPath("/");
