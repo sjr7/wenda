@@ -65,4 +65,16 @@ public class Question {
     public void setCommentCount(int commentCount) {
         this.commentCount = commentCount;
     }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createDate=" + createDate +
+                ", userId=" + userId +
+                ", commentCount=" + commentCount +
+                '}';
+    }
 }

@@ -82,3 +82,87 @@
  2.数据库手动写sql语句注意
  - 注释 COMMENT后使用单引号'
  - 字段,表名需要括起来就是用反单引号`,也就是数字键1旁边的键位
+ 
+ 3.无法插入数据问题  
+ ```
+  sql> INSERT INTO question (id, title, content, user_id, created_date, comment_count)
+  VALUES (
+    NULL, "如何看待知乎的行为", '无法看待', 10000, CURRENT_TIMESTAMP(), 55)
+  [2017-09-02 23:40:08] [HY000][1366] Incorrect string value: '\xE5\xA6\x82\xE4\xBD\x95...' for column 'title' at row 1
+  [2017-09-02 23:40:08] [HY000][1366] Incorrect string value: '\xE6\x97\xA0\xE6\xB3\x95...' for column 'content' at row 1
+  [2017-09-02 23:40:08] [HY000][1366] Incorrect string value: '\xE5\xA6\x82\xE4\xBD\x95...' for column 'title' at row 1
+ ```
+ 看起来就是应该是中文才插不进去,然后我想起课程里面的sq代码是没有指定字符集的,而是默认的字符集,首先先选择需要更改编码的数据,然后使用mysql的查看字符集指令
+ `show variables like 'character%';
+我这边跑出来的是一下的结果
+````
++--------------------------+----------------------------+
+| Variable_name            | Value                      |
++--------------------------+----------------------------+
+| character_set_client     | utf8                       |
+| character_set_connection | utf8                       |
+| character_set_database   | utf8                       |
+| character_set_filesystem | binary                     |
+| character_set_results    | utf8                       |
+| character_set_server     | latin1                     |
+| character_set_system     | utf8                       |
+| character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
+````
+我们可以看到`character_set_server`的编码是**latin1**,然后我们先修改编码,使用
+`set character_set_server =utf8`更改`character_set_server`的编码,然后查看结果
+````
++--------------------------+----------------------------+
+| Variable_name            | Value                      |
++--------------------------+----------------------------+
+| character_set_client     | utf8                       |
+| character_set_connection | utf8                       |
+| character_set_database   | utf8                       |
+| character_set_filesystem | binary                     |
+| character_set_results    | utf8                       |
+| character_set_server     | utf8                       |
+| character_set_system     | utf8                       |
+| character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
+````
+可以看到这里是已经更改好了的,然后我继续插入数据,还是失败了,只有手动删表,然后再建表的时候自己设置下编码,根据资料里面的SQL脚本为
+````sql
+CREATE TABLE `question` (
+  `id`            INT          NOT NULL AUTO_INCREMENT,
+  `title`         VARCHAR(255) NOT NULL,
+  `content`       TEXT         NULL,
+  `user_id`       INT          NOT NULL,
+  `created_date`  DATETIME     NOT NULL,
+  `comment_count` INT          NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `date_index` (`created_date` ASC)
+)
+````
+我这里需改为下面的之后再重新插入是没用问题的
+````sql
+CREATE TABLE `question` (
+  `id`            INT          NOT NULL AUTO_INCREMENT,
+  `title`         VARCHAR(255) NOT NULL,
+  `content`       TEXT         NULL,
+  `user_id`       INT          NOT NULL,
+  `created_date`  DATETIME     NOT NULL,
+  `comment_count` INT          NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `date_index` (`created_date` ASC)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8 COMMENT '问题表';
+````
+增加的内容为:
+- `ENGINE = InnoDB`:数据库引擎,**InnoDB**是支持事物,外键关联,行级锁的
+- `DEFAULT CHARSET = UTF8`:手动设置数据库编码,不适用默认编码
+
+
+
+
+
+
+
+
+
+
