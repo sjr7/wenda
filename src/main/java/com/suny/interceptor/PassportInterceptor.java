@@ -42,7 +42,7 @@ public class PassportInterceptor implements HandlerInterceptor {
         }
         if (ticket != null) {
             LoginTicket loginTicket = loginTicketDAO.selectByTicket(ticket);
-            if (loginTicket == null || loginTicket.getExpired().before(new Date()) || loginTicket.getStatus() != 0) {
+            if (loginTicket == null || loginTicket.getExpired().before(new Date()) || loginTicket.getStatus() != 1) {
                 return true;
             }
             User user = userDAO.selectById(loginTicket.getUserId());

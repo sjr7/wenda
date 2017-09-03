@@ -62,6 +62,7 @@ public class UserService {
 
     public Map<String, Object> login(String username, String password) {
         Map<String, Object> map = new HashMap<>();
+        String ticket;
         if (StringUtils.isBlank(username)) {
             map.put("msg", "用户名不能为空");
             return map;
@@ -72,19 +73,37 @@ public class UserService {
         }
 
         User user = userDAO.selectByName(username);
-
         if (user == null) {
             map.put("msg", "用户名不存在");
             return map;
         }
-
         if (!WendaUtil.MD5(password + user.getSalt()).equals(user.getPassword())) {
             map.put("msg", "密码不正确");
             return map;
         }
-        String ticket = addLoginTicket(user.getId());
+        LoginTicket loginTicket = loginTicketDAO.selectByUserId(user.getId());
+        boolean expiredStatus = checkTicketExpired(loginTicket);
+        if (!expiredStatus) {
+            ticket = addLoginTicket(user.getId());
+        } else {
+            ticket = loginTicket.getTicket();
+        }
         map.put("ticket", ticket);
         return map;
+    }
+
+    private boolean checkTicketExpired(LoginTicket loginTicket) {
+        if (loginTicket == null) {
+            return false;
+        }
+        // 0有效,1无效
+        Date expiredDate = loginTicket.getExpired();
+        // 时间过期了或者是状态为0就直接删除好了
+        if (expiredDate.before(new Date()) || loginTicket.getStatus() == 0) {
+            loginTicketDAO.deleteTicket(loginTicket.getId());
+            return false;
+        }
+        return true;
     }
 
     private String addLoginTicket(int userId) {
@@ -93,7 +112,7 @@ public class UserService {
         Date date = new Date();
         date.setTime(date.getTime() + 1000 * 3600 * 24);
         loginTicket.setExpired(date);
-        loginTicket.setStatus(0);
+        loginTicket.setStatus(1);
         loginTicket.setTicket(UUID.randomUUID().toString().replaceAll("-", ""));
         loginTicketDAO.addTicket(loginTicket);
         return loginTicket.getTicket();

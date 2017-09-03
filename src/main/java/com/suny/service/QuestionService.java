@@ -4,6 +4,7 @@ import com.suny.dao.QuestionDAO;
 import com.suny.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -20,8 +21,34 @@ public class QuestionService {
         this.questionDAO = questionDAO;
     }
 
+
+    public int addQuestion(Question question) {
+        question.setTitle(HtmlUtils.htmlEscape(question.getTitle()));
+        question.setContent(HtmlUtils.htmlEscape(question.getContent()));
+        // 敏感词审查
+
+        return questionDAO.addQuestion(question) > 0 ? question.getId() : 0;
+    }
+
     public List<Question> getLatestQuestion(int userId, int offset, int limit) {
         return questionDAO.selectLatestQuestions(userId, offset, limit);
     }
 
+    public int updateCommentCount(int id, int count) {
+        return questionDAO.updateCommentCount(id, count);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
