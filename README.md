@@ -157,6 +157,10 @@ CREATE TABLE `question` (
 - `ENGINE = InnoDB`:数据库引擎,**InnoDB**是支持事物,外键关联,行级锁的
 - `DEFAULT CHARSET = UTF8`:手动设置数据库编码,不适用默认编码
 
+4.Chrome提交表单报错
+```
+An invalid form control with name='' is not focusable.
+```
 
 
 

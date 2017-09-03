@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 控制项目的主页面相关类
  * Created by 孙建荣 on 17-9-1.上午10:21
  */
 @Controller
@@ -35,6 +36,14 @@ public class HomeController {
         this.userService = userService;
     }
 
+    /**
+     * 私有的获取问题列表方法
+     *
+     * @param userId 用户的id
+     * @param offset 从数据库的第几条开始查询
+     * @param limit  限制查询几条数据
+     * @return 查询出来的问题集合
+     */
     private List<ViewObject> getQuestion(int userId, int offset, int limit) {
         List<Question> questionList = questionService.getLatestQuestion(userId, offset, limit);
         List<ViewObject> objectList = new ArrayList<>();
@@ -48,12 +57,26 @@ public class HomeController {
     }
 
 
+    /**
+     * 项目主页面,默认获取前10条问题列表
+     *
+     * @param model 存放数据模型
+     * @param pop   如果为0则查询所有问题,否则就查询指定用户问题列表
+     * @return 对应的主页面
+     */
     @RequestMapping(path = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
-    public String index(Model model, @RequestParam(value = "pop", defaultValue = "0") int top) {
+    public String index(Model model, @RequestParam(value = "pop", defaultValue = "0") int pop) {
         model.addAttribute("vos", getQuestion(0, 0, 10));
         return "index";
     }
 
+    /**
+     * 根据用户的id查询用户的问题列表
+     *
+     * @param model  存放数据模型
+     * @param userId 指定用户的id
+     * @return 查询出来的结果页面
+     */
     @RequestMapping(path = {"/user/{userId}"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String userIndex(Model model, @PathVariable("userId") int userId) {
         model.addAttribute("vos", getQuestion(userId, 0, 10));

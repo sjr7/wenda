@@ -73,6 +73,7 @@ public class UserService {
 
         if (user == null) {
             map.put("msg", "用户名不存在");
+            return map;
         }
 
         if (!WendaUtil.MD5(password + user.getSalt()).equals(user.getPassword())) {
