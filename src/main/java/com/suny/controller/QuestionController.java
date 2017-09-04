@@ -1,20 +1,21 @@
 package com.suny.controller;
 
-import com.suny.model.HostHolder;
-import com.suny.model.Question;
+import com.suny.model.*;
+import com.suny.service.CommentService;
 import com.suny.service.QuestionService;
 import com.suny.service.UserService;
 import com.suny.utils.WendaUtil;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by 孙建荣 on 17-9-3.下午6:22
@@ -28,14 +29,34 @@ public class QuestionController {
     private final HostHolder hostHolder;
     private final UserService userService;
 
+    private final CommentService commentService;
+
 
     @Autowired
-    public QuestionController(QuestionService questionService, HostHolder hostHolder, UserService userService) {
+    public QuestionController(QuestionService questionService, HostHolder hostHolder, UserService userService, CommentService commentService) {
         this.questionService = questionService;
         this.hostHolder = hostHolder;
         this.userService = userService;
+        this.commentService = commentService;
     }
 
+
+    @RequestMapping(value = "/question/{qid}", method = {RequestMethod.GET})
+    public String questionDetail(Model model, @PathVariable("qid") int qid) {
+
+        Question question = questionService.getById(qid);
+        model.addAttribute("question", question);
+        List<Comment> commentList = commentService.getCommentsByEntity(qid, EntityType.ENTITY_QUESTION);
+        ArrayList<ViewObject> vos = new ArrayList<>();
+        for (Comment comment : commentList) {
+            ViewObject vo = new ViewObject();
+            vo.set("comment", comment);
+            vo.set("user", userService.getUser(comment.getUserId()));
+            vos.add(vo);
+        }
+        model.addAttribute("comments", vos);
+        return "detail";
+    }
 
     @RequestMapping(value = "/question/add", method = {RequestMethod.POST})
     @ResponseBody
