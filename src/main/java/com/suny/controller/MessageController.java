@@ -81,7 +81,7 @@ public class MessageController {
                 vo.set("userId", user.getId());
                 messages.add(vo);
             }
-            model.addAttribute("message", messages);
+            model.addAttribute("messages", messages);
         } catch (Exception e) {
             logger.error("获取消息详情失败" + e.getMessage());
         }
@@ -105,7 +105,9 @@ public class MessageController {
             message.setFromId(hostHolder.getUser().getId());
             message.setToId(user.getId());
             message.setCreateDate(new Date());
-
+            int fromId = hostHolder.getUser().getId();
+            int toId = user.getId();
+            message.setConversationId(fromId < toId ? String.format("%d_%d", fromId, toId) : String.format("%d_%d", toId, fromId));
             messageService.addMessage(message);
             return WendaUtil.getJSONString(0);
         } catch (Exception e) {
@@ -126,6 +128,7 @@ public class MessageController {
             message.setFromId(fromId);
             message.setToId(toId);
             message.setCreateDate(new Date());
+            message.setConversationId(fromId < toId ? String.format("%d_%d", fromId, toId) : String.format("%d_%d", toId, fromId));
             messageService.addMessage(message);
             return WendaUtil.getJSONString(message.getId());
         } catch (Exception e) {

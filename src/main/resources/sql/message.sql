@@ -6,7 +6,7 @@ CREATE TABLE `message` (
   `to_id`           INT(11)     NOT NULL,
   `content`         TEXT        NOT NULL,
   `has_read`        INT(11)     NOT NULL DEFAULT 0,
-  `conversation_id` VARCHAR(50) NOT NULL,
+  `conversation_id` VARCHAR(50) NOT NULL DEFAULT 0,
   `create_date`     DATETIME    NOT NULL,
   PRIMARY KEY (`id`)
 )
