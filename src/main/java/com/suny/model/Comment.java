@@ -13,6 +13,7 @@ public class Comment {
     private int entityType;
     private String content;
     private Date createDate;
+    // 在数据库里面默认0就是有效的,1是被逻辑删除的
     private int status;
 
     public Comment() {
