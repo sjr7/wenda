@@ -16,9 +16,12 @@ public class QuestionService {
 
     private final QuestionDAO questionDAO;
 
+    private final SensitiveService sensitiveService;
+
     @Autowired
-    public QuestionService(QuestionDAO questionDAO) {
+    public QuestionService(QuestionDAO questionDAO, SensitiveService sensitiveService) {
         this.questionDAO = questionDAO;
+        this.sensitiveService = sensitiveService;
     }
 
 
@@ -26,7 +29,8 @@ public class QuestionService {
         question.setTitle(HtmlUtils.htmlEscape(question.getTitle()));
         question.setContent(HtmlUtils.htmlEscape(question.getContent()));
         // 敏感词审查
-
+        question.setTitle(sensitiveService.filter(question.getTitle()));
+        question.setContent(sensitiveService.filter(question.getContent()));
         return questionDAO.addQuestion(question) > 0 ? question.getId() : 0;
     }
 

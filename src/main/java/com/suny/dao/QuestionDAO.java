@@ -12,7 +12,7 @@ import java.util.List;
 public interface QuestionDAO {
 
     String TABLE_NAME = "question";
-    String INSERT_FIELDS = "title, content, user_id, created_date, comment_count";
+    String INSERT_FIELDS = "title, content, user_id, create_date, comment_count";
     String SELECT_FIELDS = "id," + INSERT_FIELDS;
 
     /**
@@ -21,7 +21,7 @@ public interface QuestionDAO {
      * @param question 问题的详情
      * @return 插入成功的条数
      */
-    @Insert({"insert into", TABLE_NAME, "(", INSERT_FIELDS, ") values (#{title}, #{content}, #{userId}, #{createdDate}, #{commentCount}"})
+    @Insert({"insert into", TABLE_NAME, "(", INSERT_FIELDS, ") values (#{title}, #{content}, #{userId}, #{createDate}, #{commentCount})"})
     int addQuestion(Question question);
 
     List<Question> selectLatestQuestions(@Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);

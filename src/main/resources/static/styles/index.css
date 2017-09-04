@@ -5844,7 +5844,8 @@ h2+.meta {
 }
 
 .feed-main {
-    margin-left: 48px
+    margin-left: 48px;
+    position: relative;
 }
 
 .feed-main>.title {
@@ -5856,7 +5857,7 @@ h2+.meta {
 }
 
 .feed-item .entry-body {
-    position: relative
+    /*position: relative*/
 }
 
 .entry-body .zm-item-vote,.zm-item-answer .zm-item-vote,.zm-item-feed .zm-item-vote,.zm-item-answer .zm-item-answer-summary {
@@ -10255,7 +10256,7 @@ html.no-touchevents .zu-top-nav-userinfo:hover {
 .topnav-noauth {
     float: right;
     margin: 0 0 0 15px;
-    line-height: 46px
+    line-height: 45px
 }
 
 .topnav-noauth .zg-icon {
@@ -10267,8 +10268,8 @@ html.no-touchevents .zu-top-nav-userinfo:hover {
 .topnav-noauth a {
     padding: 0 10px;
     width: auto;
-    height: 46px;
-    line-height: 46px;
+    height: 45px;
+    line-height: 45px;
     text-align: center;
     display: block;
     color: #eee;
@@ -15664,7 +15665,8 @@ html.no-touchevents .zm-item-vote-count:hover {
 .zm-item-vote {
     display: none;
     position: absolute;
-    left: -48px
+    left: -48px;
+    top: 50px;
 }
 
 .zm-votebar {

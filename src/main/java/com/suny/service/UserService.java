@@ -96,7 +96,7 @@ public class UserService {
         if (loginTicket == null) {
             return false;
         }
-        // 0有效,1无效
+        // 0无效,1有效
         Date expiredDate = loginTicket.getExpired();
         // 时间过期了或者是状态为0就直接删除好了
         if (expiredDate.before(new Date()) || loginTicket.getStatus() == 0) {
@@ -124,7 +124,7 @@ public class UserService {
     }
 
     public void logout(String ticket) {
-        loginTicketDAO.updateStatus(ticket, 1);
+        loginTicketDAO.updateStatus(ticket, 0);
     }
 
 }
