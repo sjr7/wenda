@@ -28,6 +28,10 @@ public class UserService {
         this.loginTicketDAO = loginTicketDAO;
     }
 
+    public User selectByName(String name) {
+        return userDAO.selectByName(name);
+    }
+
     @Transactional
     public Map<String, Object> register(String username, String password) {
         Map<String, Object> map = new HashMap<>();

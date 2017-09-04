@@ -192,6 +192,33 @@ public class PassportInterceptor implements HandlerInterceptor {
 @Select({"select", SELECT_FIELDS + " from " + TABLE_NAME + " where ticket=#{ticket}"})
 ````
 
+7.报错信息:[42000][1055] Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'tt.from_id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by   
+sql代码:
+```sql
+SELECT
+  from_id,
+  to_id,
+  content,
+  has_read,
+  conversation_id,
+  create_date,
+  count(id) AS id
+FROM
+  (SELECT *
+   FROM message
+   WHERE from_id = 10000 OR to_id = 10000
+   ORDER BY id DESC) tt
+GROUP BY conversation_id
+```
+查看模式
+```sql
+SELECT @@global.sql_mode
+```
+关闭限制
+```sql
+set sql_mode ='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+```
+
 
 
 
