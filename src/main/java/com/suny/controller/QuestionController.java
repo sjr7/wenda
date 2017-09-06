@@ -2,6 +2,7 @@ package com.suny.controller;
 
 import com.suny.model.*;
 import com.suny.service.CommentService;
+import com.suny.service.LikeService;
 import com.suny.service.QuestionService;
 import com.suny.service.UserService;
 import com.suny.utils.WendaUtil;
@@ -32,12 +33,15 @@ public class QuestionController {
     private final CommentService commentService;
 
 
+    private final LikeService likeService;
+
     @Autowired
-    public QuestionController(QuestionService questionService, HostHolder hostHolder, UserService userService, CommentService commentService) {
+    public QuestionController(QuestionService questionService, HostHolder hostHolder, UserService userService, CommentService commentService, LikeService likeService) {
         this.questionService = questionService;
         this.hostHolder = hostHolder;
         this.userService = userService;
         this.commentService = commentService;
+        this.likeService = likeService;
     }
 
 
@@ -51,6 +55,12 @@ public class QuestionController {
         for (Comment comment : commentList) {
             ViewObject vo = new ViewObject();
             vo.set("comment", comment);
+            if (hostHolder.getUser() == null) {
+                vo.set("liked", 0);
+            } else {
+                vo.set("liked", likeService.getLikeStatus(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT, comment.getId()));
+            }
+            vo.set("likeCount", likeService.getLikeCount(EntityType.ENTITY_COMMENT, comment.getId()));
             vo.set("user", userService.getUser(comment.getUserId()));
             vos.add(vo);
         }

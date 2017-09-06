@@ -1,5 +1,8 @@
 package com.suny.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.suny.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -7,6 +10,9 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.BinaryClient;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Tuple;
+
+import java.util.List;
 
 /**
  * Created by 孙建荣 on 17-9-5.下午3:56
@@ -103,6 +109,68 @@ public class JedisAdapter implements InitializingBean {
             print(28, jedis.smembers(likeKey1));
             print(29, jedis.scard(likeKey1));
 
+            String rankKey = "rankKey";
+            jedis.zadd(rankKey, 15, "jim");
+            jedis.zadd(rankKey, 60, "Ben");
+            jedis.zadd(rankKey, 75, "Lucy");
+            jedis.zadd(rankKey, 80, "Mei");
+            // 获取总个数
+            print(30, jedis.zcard(rankKey));
+            print(31, jedis.zcount(rankKey, 61, 100));
+            print(32, jedis.zscore(rankKey, "Lucy"));
+            jedis.zincrby(rankKey, 2, "Lucy");
+            print(33, jedis.zscore(rankKey, "Lucy"));
+            jedis.zincrby(rankKey, 2, "Luc");
+            print(33, jedis.zscore(rankKey, "Luc"));
+            print(34, jedis.zrange(rankKey, 0, 100));
+            print(34, jedis.zrange(rankKey, 0, 10));
+            print(34, jedis.zrange(rankKey, 1, 3));
+            print(34, jedis.zrevrange(rankKey, 1, 3));
+
+            for (Tuple tuple : jedis.zrangeByScoreWithScores(rankKey, 60, 100)) {
+                print(38, tuple.getElement() + ":" + String.valueOf(tuple.getScore()));
+            }
+
+            print(39, jedis.zrank(rankKey, "Ben"));
+            print(39, jedis.zrevrank(rankKey, "Ben"));
+
+            String setKey = "zset";
+            jedis.zadd(setKey, 1, "a");
+            jedis.zadd(setKey, 1, "b");
+            jedis.zadd(setKey, 1, "b");
+            jedis.zadd(setKey, 1, "d");
+            jedis.zadd(setKey, 1, "e");
+
+
+            print(40, jedis.zlexcount(setKey, "-", "+"));
+            print(41, jedis.zlexcount(setKey, "(b", "[b"));
+            print(41, jedis.zlexcount(setKey, "[b", "[b"));
+            // 移除
+            jedis.zrem(setKey, "b");
+            print(43, jedis.zrange(setKey, 0, 10));
+            jedis.zremrangeByLex(setKey, "(c", "+");
+            print(44, jedis.zrange(setKey, 0, 2));
+
+            /*JedisPool pool = new JedisPool();
+            for (int i = 0; i < 100; i++) {
+                Jedis j = pool.getResource();
+                print(45, jedis.get("pv"));
+                j.close();
+            }*/
+
+            User user = new User();
+            user.setName("xx");
+            user.setPassword("ppp");
+            user.setHeadUrl("a.png");
+            user.setSalt("salt");
+            user.setId(1);
+            print(46, JSONObject.toJSONString(user));
+            jedis.set("user1", JSONObject.toJSONString(user));
+
+            String value = jedis.get("user1");
+            User userFromJson = JSON.parseObject(value, User.class);
+            print(47, userFromJson.toString());
+
 
         } catch (Exception e) {
             logger.error("操作redis失败" + e.getMessage());
@@ -114,8 +182,70 @@ public class JedisAdapter implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
+        jedisPool = new JedisPool("redis://localhost:6379/10");
     }
+
+    public long sadd(String key, String value) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.sadd(key, value);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        }
+        return 0;
+    }
+
+
+    public long srem(String key, String value) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.srem(key, value);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        }
+        return 0;
+    }
+
+    public long scard(String key) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.scard(key);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        }
+        return 0;
+    }
+
+
+    /**
+     * 判断是否在set里面，1则表示在,0=则表示不存在
+     */
+    public boolean sismember(String key, String value) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.sismember(key, value);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        }
+        return false;
+    }
+
+
+    public List<String> brpop(int timeout, String key) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.brpop(timeout, key);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        }
+        return null;
+    }
+
+    public long lpush(String key, String value) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.lpush(key, value);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        }
+        return 0;
+    }
+
+
 }
 
 

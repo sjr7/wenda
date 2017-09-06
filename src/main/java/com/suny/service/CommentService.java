@@ -37,6 +37,11 @@ public class CommentService {
         commentDAO.updateStatus(entityId, entityType, 1);
     }
 
+
+    public Comment getCommentById(int id) {
+        return commentDAO.getCommentById(id);
+    }
+
 }
 
 
