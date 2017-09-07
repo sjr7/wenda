@@ -1,5 +1,8 @@
 package com.suny.controller;
 
+import com.suny.async.EventModel;
+import com.suny.async.EventProducer;
+import com.suny.async.EventType;
 import com.suny.model.Comment;
 import com.suny.model.EntityType;
 import com.suny.model.HostHolder;
@@ -26,12 +29,15 @@ public class LikeController {
 
     private final CommentService commentService;
 
+    private final EventProducer eventProducer;
+
 
     @Autowired
-    public LikeController(LikeService likeService, HostHolder hostHolder, CommentService commentService) {
+    public LikeController(LikeService likeService, HostHolder hostHolder, CommentService commentService, EventProducer eventProducer) {
         this.likeService = likeService;
         this.hostHolder = hostHolder;
         this.commentService = commentService;
+        this.eventProducer = eventProducer;
     }
 
     @RequestMapping(path = {"/like"}, method = {RequestMethod.POST})
@@ -40,7 +46,13 @@ public class LikeController {
         if (hostHolder.getUser() == null) {
             return WendaUtil.getJSONString(999);
         }
+        Comment comment = commentService.getCommentById(commentId);
 
+
+        eventProducer.fireEvent(new EventModel(EventType.LIKE)
+                .setActorId(hostHolder.getUser().getId()).setEntityId(commentId)
+                .setEntityType(EntityType.ENTITY_COMMENT)
+                .setEntityOwnerId(comment.getUserId()).setExt("questionId", String.valueOf(comment.getEntityId())));
         long likeCount = likeService.like(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT, commentId);
         return WendaUtil.getJSONString(0, String.valueOf(likeCount));
     }

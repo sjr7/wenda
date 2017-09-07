@@ -11,8 +11,12 @@ import java.util.Map;
  * Created by 孙建荣 on 17-9-1.上午10:57
  */
 public class WendaUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(WendaUtil.class);
 
+
+    public static int ANONYMOUS_USERID = 10000;
+    public static int SYSTEM_USERID = 10001;
 
     public static String getJSONString(int code) {
         JSONObject jsonObject = new JSONObject();
