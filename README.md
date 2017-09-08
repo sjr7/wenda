@@ -220,7 +220,126 @@ set sql_mode ='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISI
 ```
 
 
+- 发送邮件失败
+````
+Exception in thread "Thread-4" org.springframework.mail.MailSendException: Mail server connection failed; nested exception is javax.mail.MessagingException: Could not connect to SMTP host: localhost, port: 465;
+  nested exception is:
+	java.net.ConnectException: Connection refused. Failed messages: javax.mail.MessagingException: Could not connect to SMTP host: localhost, port: 465;
+  nested exception is:
+	java.net.ConnectException: Connection refused; message exception details (1) are:
+Failed message 1:
+javax.mail.MessagingException: Could not connect to SMTP host: localhost, port: 465;
+  nested exception is:
+	java.net.ConnectException: Connection refused
+	at com.sun.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:1961)
+	at com.sun.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:654)
+	at javax.mail.Service.connect(Service.java:295)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.connectTransport(JavaMailSenderImpl.java:501)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:421)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.send(JavaMailSenderImpl.java:345)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.send(JavaMailSenderImpl.java:340)
+	at com.suny.utils.MailSender.sendWithHTMLTemplate(MailSender.java:55)
+	at com.suny.async.handler.LoginExceptionHandler.doHandle(LoginExceptionHandler.java:33)
+	at com.suny.async.EventConsumer$1.run(EventConsumer.java:78)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at java.net.Socket.connect(Socket.java:538)
+	at com.sun.mail.util.SocketFetcher.createSocket(SocketFetcher.java:321)
+	at com.sun.mail.util.SocketFetcher.getSocket(SocketFetcher.java:237)
+	at com.sun.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:1927)
+	... 10 more
 
+
+````
+看这个就直接去看邮件服务器信息是否错误,我的是配置的信息错误
+
+
+- 邮件认证失败
+````
+
+Exception in thread "Thread-4" org.springframework.mail.MailAuthenticationException: Authentication failed; nested exception is javax.mail.AuthenticationFailedException: 535 Error: ÇëÊ¹ÓÃÊÚÈ¨ÂëµÇÂ¼¡£ÏêÇéÇë¿´: http://service.mail.qq.com/cgi-bin/help?subtype=1&&id=28&&no=1001256
+
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:424)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.send(JavaMailSenderImpl.java:345)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.send(JavaMailSenderImpl.java:340)
+	at com.suny.utils.MailSender.sendWithHTMLTemplate(MailSender.java:55)
+	at com.suny.async.handler.LoginExceptionHandler.doHandle(LoginExceptionHandler.java:33)
+	at com.suny.async.EventConsumer$1.run(EventConsumer.java:78)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: javax.mail.AuthenticationFailedException: 535 Error: ÇëÊ¹ÓÃÊÚÈ¨ÂëµÇÂ¼¡£ÏêÇéÇë¿´: http://service.mail.qq.com/cgi-bin/help?subtype=1&&id=28&&no=1001256
+
+	at com.sun.mail.smtp.SMTPTransport$Authenticator.authenticate(SMTPTransport.java:826)
+	at com.sun.mail.smtp.SMTPTransport.authenticate(SMTPTransport.java:761)
+	at com.sun.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:685)
+	at javax.mail.Service.connect(Service.java:295)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.connectTransport(JavaMailSenderImpl.java:501)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:421)
+	... 6 more
+
+
+````
+
+- 邮箱认证失败
+````
+Exception in thread "Thread-4" org.springframework.mail.MailSendException: Failed messages: com.sun.mail.smtp.SMTPSendFailedException: 501 mail from address must be same as authorization user
+;
+  nested exception is:
+	com.sun.mail.smtp.SMTPSenderFailedException: 501 mail from address must be same as authorization user
+; message exception details (1) are:
+Failed message 1:
+com.sun.mail.smtp.SMTPSendFailedException: 501 mail from address must be same as authorization user
+;
+  nested exception is:
+	com.sun.mail.smtp.SMTPSenderFailedException: 501 mail from address must be same as authorization user
+
+	at com.sun.mail.smtp.SMTPTransport.issueSendCommand(SMTPTransport.java:2108)
+	at com.sun.mail.smtp.SMTPTransport.mailFrom(SMTPTransport.java:1609)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1117)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:448)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.send(JavaMailSenderImpl.java:345)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.send(JavaMailSenderImpl.java:340)
+	at com.suny.utils.MailSender.sendWithHTMLTemplate(MailSender.java:55)
+	at com.suny.async.handler.LoginExceptionHandler.doHandle(LoginExceptionHandler.java:33)
+	at com.suny.async.EventConsumer$1.run(EventConsumer.java:78)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: com.sun.mail.smtp.SMTPSenderFailedException: 501 mail from address must be same as authorization user
+
+	at com.sun.mail.smtp.SMTPTransport.mailFrom(SMTPTransport.java:1616)
+````
+原因:邮件来源地址必须跟你发送邮件的地址是一模一样的,否则报错
+![images/mailformError.png](images/mailformError.png)
+```java
+public boolean sendWithHTMLTemplate(String to, String subject,
+                                        String template, Map<String, Object> model) {
+        try {
+            String nick = MimeUtility.encodeText("邮件通知");
+            // 下面这个邮箱地址必须跟发送邮件的地址一模一样,否则报错
+            InternetAddress from = new InternetAddress(nick + "<demo@vip.qq.com>");
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+            String result = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, template, "UTF-8", model);
+            mimeMessageHelper.setTo(to);
+            mimeMessageHelper.setFrom(from);
+            mimeMessageHelper.setSubject(subject);
+            mimeMessageHelper.setText(result, true);
+            mailSender.send(mimeMessage);
+            return true;
+        } catch (UnsupportedEncodingException e) {
+            logger.error("发送邮件失败", e.getMessage());
+            return false;
+        } catch (javax.mail.MessagingException e) {
+            logger.error("消息发送异常", e.getMessage());
+            return false;
+        }
+    }
+```
+解决方法:
 
 
 

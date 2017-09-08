@@ -1,6 +1,9 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
 
+### important password file
+src/main/resources/mailSetting.properties
+
 ### STS ###
 .apt_generated
 .classpath

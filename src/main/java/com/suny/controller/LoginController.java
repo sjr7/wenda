@@ -1,5 +1,8 @@
 package com.suny.controller;
 
+import com.suny.async.EventModel;
+import com.suny.async.EventProducer;
+import com.suny.async.EventType;
 import com.suny.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -25,9 +28,12 @@ public class LoginController {
 
     private final UserService userService;
 
+    private final EventProducer eventProducer;
+
     @Autowired
-    public LoginController(UserService userService) {
+    public LoginController(UserService userService, EventProducer eventProducer) {
         this.userService = userService;
+        this.eventProducer = eventProducer;
     }
 
 
@@ -84,6 +90,15 @@ public class LoginController {
                     cookie.setMaxAge(3600 * 24 * 5);
                 }
                 response.addCookie(cookie);
+
+                logger.info("开始发送登录操作邮件");
+                // 发送邮件事件,这里由于个别原因暂时注释,首先这里的邮件地址是需要根据用户的邮箱来进行发送的,这里固定了所以不合适
+
+               /* eventProducer.fireEvent(new EventModel(EventType.LOGIN)
+                        .setExt("username", username)
+                        .setExt("email", "demo@vip.qq.com")
+                        .setActorId((Integer) map.get("userId")));*/
+
                 if (StringUtils.isNotBlank(next)) {
                     return "redirect:" + next;
                 }
