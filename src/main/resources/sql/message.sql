@@ -5,7 +5,8 @@ CREATE TABLE `message` (
   `from_id`         INT(11)     NOT NULL,
   `to_id`           INT(11)     NOT NULL,
   `content`         TEXT        NOT NULL,
-  `has_read`        INT(11)     NOT NULL DEFAULT 0,
+  `has_read`        TINYINT(1)  NOT NULL DEFAULT 0
+  COMMENT '0为没有阅读,1为已经阅读过了的',
   `conversation_id` VARCHAR(50) NOT NULL DEFAULT 0,
   `create_date`     DATETIME    NOT NULL,
   PRIMARY KEY (`id`)

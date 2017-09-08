@@ -22,6 +22,10 @@ public class MessageService {
         this.sensitiveService = sensitiveService;
     }
 
+    public void updateMessageReadStatus(String conversationId) {
+        messageDAO.updateMessagesReadStatus(conversationId);
+    }
+
 
     public int addMessage(Message message) {
         message.setContent(sensitiveService.filter(message.getContent()));
@@ -36,7 +40,7 @@ public class MessageService {
         return messageDAO.getConversationList(userId, offset, limit);
     }
 
-    public int getConvesationUnreadCount(int userId, String conversationId) {
+    public int getConversationUnreadCount(int userId, String conversationId) {
         return messageDAO.getConversationUnreadCount(userId, conversationId);
     }
 

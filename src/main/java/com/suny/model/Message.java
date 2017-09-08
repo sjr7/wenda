@@ -12,6 +12,7 @@ public class Message {
     private int toId;
     private String content;
     private Date createDate;
+    // 0为没有阅读,1为已经阅读过了的
     private int hasRead;
     private String conversationId;
 

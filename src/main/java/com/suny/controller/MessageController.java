@@ -7,6 +7,7 @@ import com.suny.model.ViewObject;
 import com.suny.service.MessageService;
 import com.suny.service.UserService;
 import com.suny.utils.WendaUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ public class MessageController {
                 int targetId = message.getFromId() == localUserId ? message.getToId() : message.getFromId();
                 User user = userService.getUser(targetId);
                 vo.set("user", user);
-                vo.set("unread", messageService.getConvesationUnreadCount(localUserId, message.getConversationId()));
+                vo.set("unread", messageService.getConversationUnreadCount(localUserId, message.getConversationId()));
                 conversations.add(vo);
             }
             model.addAttribute("conversations", conversations);
@@ -67,24 +68,35 @@ public class MessageController {
 
     @RequestMapping(path = {"/msg/detail"}, method = {RequestMethod.GET})
     public String conversationDetail(Model model, @Param("conversationId") String conversationId) {
+        if (StringUtils.isBlank(conversationId)) {
+            return "/msg/list";
+        }
         try {
+            // 得到两个账号之间的会话列表数据
             List<Message> conversationList = messageService.getConversationDetail(conversationId, 0, 10);
             List<ViewObject> messages = new ArrayList<>();
+
+            // 循环遍历会话列表,每条会话数据到前端就是一个会话框
             for (Message msg : conversationList) {
                 ViewObject vo = new ViewObject();
                 vo.set("message", msg);
+                // 得到发送消息的用户信息
                 User user = userService.getUser(msg.getFromId());
                 if (user == null) {
                     continue;
                 }
+                // 设置头像以及用户ID
                 vo.set("headUrl", user.getHeadUrl());
                 vo.set("userId", user.getId());
+                // 把每一条消息放到消息集合里面去
                 messages.add(vo);
             }
             model.addAttribute("messages", messages);
         } catch (Exception e) {
             logger.error("获取消息详情失败" + e.getMessage());
         }
+        // 这里还应该把数据库里面会话的阅读状态设置为已经阅读,也就是has_read修改为1
+        messageService.updateMessageReadStatus(conversationId);
         return "letterDetail";
     }
 
@@ -108,6 +120,8 @@ public class MessageController {
             int fromId = hostHolder.getUser().getId();
             int toId = user.getId();
             message.setConversationId(fromId < toId ? String.format("%d_%d", fromId, toId) : String.format("%d_%d", toId, fromId));
+
+            // 这里发送消息应该有这样一个逻辑,发送消息的一方发送消息后消息肯定是被阅读了的,不可能说自己发送的消息还没有被阅读
             messageService.addMessage(message);
             return WendaUtil.getJSONString(0);
         } catch (Exception e) {

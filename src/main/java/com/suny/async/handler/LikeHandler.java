@@ -39,7 +39,8 @@ public class LikeHandler implements EventHandler {
         message.setCreateDate(new Date());
         User user = userService.getUser(model.getActorId());
         message.setContent("用户" + user.getName() + "赞了你的评论,http://127.0.0.1:8080/question/" + model.getExt("questionId"));
-        message.setConversationId(model.getActorId()+"_"+model.getEntityOwnerId());
+        // 这里的会话ID肯定是系统管理员跟通知用户之间的会话
+        message.setConversationId(WendaUtil.SYSTEM_USERID + "_" + model.getEntityOwnerId());
         messageService.addMessage(message);
     }
 
