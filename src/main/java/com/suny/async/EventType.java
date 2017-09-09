@@ -5,7 +5,12 @@ package com.suny.async;
  */
 public enum EventType {
 
-    LIKE(0), COMMENT(1), LOGIN(2), MAIL(3);
+    LIKE(0),
+    COMMENT(1),
+    LOGIN(2),
+    MAIL(3),
+    FOLLOW(4),
+    UNFOLLOW(5);
 
     private int value;
 
@@ -14,7 +19,7 @@ public enum EventType {
         this.value = value;
     }
 
-    public  int getValue() {
+    public int getValue() {
         return value;
     }
 }
