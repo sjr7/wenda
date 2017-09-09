@@ -1,10 +1,7 @@
 package com.suny.controller;
 
 import com.suny.model.*;
-import com.suny.service.CommentService;
-import com.suny.service.LikeService;
-import com.suny.service.QuestionService;
-import com.suny.service.UserService;
+import com.suny.service.*;
 import com.suny.utils.WendaUtil;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
@@ -32,16 +29,19 @@ public class QuestionController {
 
     private final CommentService commentService;
 
+    private final FollowService followService;
+
 
     private final LikeService likeService;
 
     @Autowired
-    public QuestionController(QuestionService questionService, HostHolder hostHolder, UserService userService, CommentService commentService, LikeService likeService) {
+    public QuestionController(QuestionService questionService, HostHolder hostHolder, UserService userService, CommentService commentService, LikeService likeService, FollowService followService) {
         this.questionService = questionService;
         this.hostHolder = hostHolder;
         this.userService = userService;
         this.commentService = commentService;
         this.likeService = likeService;
+        this.followService = followService;
     }
 
 
@@ -65,6 +65,27 @@ public class QuestionController {
             vos.add(vo);
         }
         model.addAttribute("comments", vos);
+
+        ArrayList<ViewObject> followUsers = new ArrayList<>();
+        // 获取关注用户信息
+        List<Integer> users = followService.getFollowers(EntityType.ENTITY_QUESTION, qid, 20);
+        for (Integer userId : users) {
+            ViewObject vo = new ViewObject();
+            User user = userService.getUser(userId);
+            if (user == null) {
+                continue;
+            }
+            vo.set("name", user.getName());
+            vo.set("headUrl", user.getHeadUrl());
+            vo.set("id", user.getId());
+            followUsers.add(vo);
+        }
+        model.addAttribute("followUsers", followUsers);
+        if (hostHolder.getUser() != null) {
+            model.addAttribute("followed", followService.isFollower(hostHolder.getUser().getId(), EntityType.ENTITY_QUESTION, qid));
+        } else {
+            model.addAttribute("followed", false);
+        }
         return "detail";
     }
 
