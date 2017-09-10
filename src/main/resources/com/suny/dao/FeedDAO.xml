@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.suny.dao.FeedDAO">
+    <sql id="table">feed</sql>
+    <sql id="selectFields">id, create_date, user_id, data, type</sql>
+
+    <select id="selectUserFeeds" resultType="com.suny.model.Feed">
+        SELECT
+        <include refid="selectFields"/>
+        FROM
+        <include refid="table"/>
+        WHERE id &lt; #{maxId}
+
+        <if test="userIds.size() != 0">
+            and user_id in
+            <foreach collection="userIds" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        order by id desc
+        limit #{count}
+
+    </select>
+
+</mapper>

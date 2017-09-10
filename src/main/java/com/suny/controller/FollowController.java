@@ -12,10 +12,7 @@ import com.suny.utils.WendaUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +47,8 @@ public class FollowController {
         this.eventProducer = eventProducer;
     }
 
-    @RequestMapping(path = "{/followUser}", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(path = "/followUser", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
     public String followUser(@RequestParam("userId") int userId) {
         if (hostHolder.getUser() == null) {
             return WendaUtil.getJSONString(999);
@@ -70,7 +68,8 @@ public class FollowController {
     }
 
 
-    @RequestMapping(path = "{/unfollowUser}", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(path = "/unfollowUser", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
     public String unfollowUser(@RequestParam("userId") int userId) {
         if (hostHolder.getUser() == null) {
             return WendaUtil.getJSONString(999);
@@ -90,7 +89,8 @@ public class FollowController {
     }
 
 
-    @RequestMapping(path = "{/followQuestion}", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(path = "/followQuestion", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
     public String followQuestion(@RequestParam("questionId") int questionId) {
         if (hostHolder.getUser() == null) {
             return WendaUtil.getJSONString(999);
@@ -119,7 +119,8 @@ public class FollowController {
     }
 
 
-    @RequestMapping(path = "{/unfollowQuestion}", method = {RequestMethod.POST})
+    @RequestMapping(path = "/unfollowQuestion", method = {RequestMethod.POST})
+    @ResponseBody
     public String unfollowQuestion(@RequestParam("questionId") int questionId) {
         if (hostHolder.getUser() == null) {
             return WendaUtil.getJSONString(999);
