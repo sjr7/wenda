@@ -14,9 +14,9 @@ import java.util.List;
 @Mapper
 public interface FeedDAO {
 
-    private String TABLE_NAME = " feed ";
-    private String INSERT_FIELDS = " user_id, data, create_date, type ";
-    private String SELECT_FIELDS = " id, " + INSERT_FIELDS;
+    String TABLE_NAME = " feed ";
+    String INSERT_FIELDS = " user_id, data, create_date, type ";
+    String SELECT_FIELDS = " id, " + INSERT_FIELDS;
 
     @Insert({"insert into ", TABLE_NAME, "(", INSERT_FIELDS,
             ") values (#{userId},#{data},#{createDate},#{type})"})
