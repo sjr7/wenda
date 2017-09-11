@@ -9,6 +9,7 @@ public class RedisKeyUtil {
     private static String BIZ_LIKE = "LIKE";
     private static String BIZ_DISLIKE = "DISLIKE";
     private static String BIZ_EVENTQUEUE = "EVENT_QUEUE";
+    private static String BIZ_TIMELINE = "TIMELINE";
 
     // 获取粉丝
     private static String BIZ_FOLLOWER = "FOLLOWER";
@@ -47,6 +48,11 @@ public class RedisKeyUtil {
      */
     public static String getFolloweeKey(int userId, int entityType) {
         return BIZ_FOLLOWER + SPLIT + String.valueOf(userId) + SPLIT + String.valueOf(entityType);
+    }
+
+
+    public static String getTImeline(int userId) {
+        return BIZ_TIMELINE + SPLIT + String.valueOf(userId);
     }
 
 
