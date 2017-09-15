@@ -985,7 +985,64 @@ e.printStackTrace();
   这里数据的读取采用Python进行爬取,主要是Python做一件事的代码量,前提是抛开别的因素.当我写第一个简单爬虫代码的时候我都惊讶到了,操作数据库短短两三行代码.非常的简洁,又有点自然语言的特点.
   采用的是`Pyspider`框架,包管理器使用`pip`,`IDE`用`IDEA`的兄弟`Pycharm`
 
- ### 压力测试
+---
+
+- ### 压力测试
+
+  这里介绍的是一个阿帕奇下的一个开源工具`apache2-utils`,因为我是在`Ubuntu`系统下,直接从终端安装就好了
+````
+sudo apt-get install apache2-utils
+````
+  然后直接在终端里面就可以打开,输入命令`ab `后面带参数`ab [options] [http[s]://]hostname[:port]/path` 就可以开始进行测试了,你可以随便输入下,然后就会有帮助出来,跟着帮助做做例子就知道怎么用了,不过这里需要注意的是网址的填写,填写简短的网址的话肯定运行不了的,网址最后面那个要带到来,例如对鹅厂测试下:
+  
+ ````
+ab -n 100 -c 100 http://qq.com/
+This is ApacheBench, Version 2.3 <$Revision: 1706008 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking qq.com (be patient).....done
+
+
+Server Software:        squid/3.5.20
+Server Hostname:        qq.com
+Server Port:            80
+
+Document Path:          /
+Document Length:        160 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.107 seconds
+Complete requests:      100
+Failed requests:        0
+Non-2xx responses:      100
+Total transferred:      45222 bytes
+HTML transferred:       16000 bytes
+Requests per second:    930.95 [#/sec] (mean)
+Time per request:       107.417 [ms] (mean)
+Time per request:       1.074 [ms] (mean, across all concurrent requests)
+Transfer rate:          411.13 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:       14   23   6.7     21      32
+Processing:    14   28  13.5     26      76
+Waiting:       14   28  13.5     26      76
+Total:         29   51  17.4     52     107
+
+Percentage of the requests served within a certain time (ms)
+  50%     52
+  66%     61
+  75%     62
+  80%     63
+  90%     73
+  95%     87
+  98%     97
+  99%    107
+ 100%    107 (longest request)
+
+```` 
+
 
 
 
