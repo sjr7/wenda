@@ -436,7 +436,7 @@ public boolean sendWithHTMLTemplate(String to, String subject,
 ---
 
 - ### Spring Boot
-貌似最近`Spring Boot`挺火的,还跟微服务,SpringCould等高大上名词的扯上了关系.总结起来就是Spring的发展导致便携性非常高,然后各种配置文件很繁琐,于是又回到了注解的开发,大幅度减少无关于业务的代码量.这个倒确实有点体会,各种Spring的配置文件手动编写起来很是麻烦.总结出特点就是:
+  貌似最近`Spring Boot`挺火的,还跟微服务,SpringCould等高大上名词的扯上了关系.总结起来就是Spring的发展导致便携性非常高,然后各种配置文件很繁琐,于是又回到了注解的开发,大幅度减少无关于业务的代码量.这个倒确实有点体会,各种Spring的配置文件手动编写起来很是麻烦.总结出特点就是:
 
 	-  创建独立的Spring应用程序
 	-  嵌入的Tomcat，无需部署WAR文件
@@ -448,7 +448,7 @@ public boolean sendWithHTMLTemplate(String to, String subject,
 	在IDEA中生成一个SpringBoot工程还是挺方便的,填入跟选择相对应的值直接一步步就可以了
     ![images/springBootProject.png](images/springbootProject.png)
     ![images/projectProperties.png](images/projectProperties.png)
-     ![images/chooseDependencies.png](images/chooseDependencies.png)
+    ![images/chooseDependencies.png](images/chooseDependencies.png)
 
 	还有一种方法就是在Spring官网生成好一个工程再导入IDEA中:
 
