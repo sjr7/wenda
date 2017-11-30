@@ -28,7 +28,7 @@ public class JedisAdapter implements InitializingBean {
         System.out.println(String.format("第%d次:%s", index, obj.toString()));
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         try (Jedis jedis = new Jedis("redis://localhost:6379/9")) {
             jedis.flushDB();
             //get srt
@@ -150,12 +150,12 @@ public class JedisAdapter implements InitializingBean {
             jedis.zremrangeByLex(setKey, "(c", "+");
             print(44, jedis.zrange(setKey, 0, 2));
 
-            /*JedisPool pool = new JedisPool();
+            *//*JedisPool pool = new JedisPool();
             for (int i = 0; i < 100; i++) {
                 Jedis j = pool.getResource();
                 print(45, jedis.get("pv"));
                 j.close();
-            }*/
+            }*//*
 
             User user = new User();
             user.setName("xx");
@@ -176,7 +176,7 @@ public class JedisAdapter implements InitializingBean {
         }
 
 
-    }
+    }*/
 
 
     @Override

@@ -171,12 +171,12 @@ public class SensitiveService implements InitializingBean {
     }
 
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         SensitiveService sensitiveService = new SensitiveService();
         sensitiveService.addWord("色情");
         sensitiveService.addWord("好色");
         System.out.println(sensitiveService.filter("你好色情X色**情XX"));
-    }
+    }*/
 
 }
 
