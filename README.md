@@ -34,6 +34,22 @@
 - ### 导入到IDE
 使用`IDEA`创建的项目,配置好`maven`的相关配置,以及项目`JDK`版本,直接在主界面选择`Open`,然后找到项目所在路径,点击导入就可以了
 
+- ### 邮件发送配置
+在[resources](src/main/resources/)下自行配置邮件发送的一些账号信息文件`mailSetting.properties`,这里提供参考信息
+
+````properties
+##以下属性自行更改
+mail.username=demo@vip.qq.com    // 账号名字
+mail.password=demo@vip.qq.com    // 账号密码
+mail.host=smtp.qq.com            // 邮件服务器
+mail.port=465                    // 邮件端口
+mail.protocol=smtps              // 邮件协议
+mail.defaultEncoding=utf8        // 编码
+````
+
+- ### 数据库的建立
+数据库文件全部位于[resources/sql](src/main/resources/sql)目录下面,导入数据库后可以自行填充数据
+
 ---
 
 
